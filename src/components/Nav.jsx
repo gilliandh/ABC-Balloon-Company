@@ -4,6 +4,15 @@ import { COLORS, NAV_LINKS } from "../constants";
 export default function Nav({ scrolled }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const handleNavLinkClick = (linkLabel) => {
+    if (window.gtag) {
+      window.gtag("event", "nav_click", {
+        event_category: "Navigation",
+        event_label: linkLabel,
+      });
+    }
+  };
+
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
@@ -24,17 +33,21 @@ export default function Nav({ scrolled }) {
           <div style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
             <div style={{ display: "flex", gap: "2rem" }}>
               {NAV_LINKS.map((l) => (
-                <a key={l} href={`#${l.toLowerCase()}`} style={{ color: "rgba(247,242,232,0.7)", fontSize: 12, letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none", transition: "color 0.2s" }}
+                <a key={l} href={`#${l.toLowerCase()}`} 
+                  onClick={() => handleNavLinkClick(l)}
+                  style={{ color: "rgba(247,242,232,0.7)", fontSize: 12, letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none", transition: "color 0.2s" }}
                   onMouseEnter={e => e.target.style.color = COLORS.champagne}
                   onMouseLeave={e => e.target.style.color = "rgba(247,242,232,0.7)"}
                 >{l}</a>
               ))}
             </div>
-            <a href="#contact" style={{
-              background: COLORS.emerald, color: COLORS.ivory, padding: "10px 22px",
-              fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none",
-              border: "none", cursor: "pointer", fontFamily: "'Lato', sans-serif", fontWeight: 700,
-            }}>Book Now</a>
+            <a href="#contact" 
+              onClick={() => handleNavLinkClick("Book Now - Nav Desktop")}
+              style={{
+                background: COLORS.emerald, color: COLORS.ivory, padding: "10px 22px",
+                fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none",
+                border: "none", cursor: "pointer", fontFamily: "'Lato', sans-serif", fontWeight: 700,
+              }}>Book Now</a>
           </div>
         </div>
 
@@ -66,7 +79,10 @@ export default function Nav({ scrolled }) {
           <a 
             key={l} 
             href={`#${l.toLowerCase()}`} 
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+              handleNavLinkClick(l + " - Mobile");
+            }}
             style={{ 
               color: COLORS.ivory, 
               fontSize: 24, 
@@ -82,7 +98,10 @@ export default function Nav({ scrolled }) {
         ))}
         <a 
           href="#contact" 
-          onClick={() => setMenuOpen(false)}
+          onClick={() => {
+            setMenuOpen(false);
+            handleNavLinkClick("Book Now - Mobile");
+          }}
           style={{
             background: COLORS.emerald, 
             color: COLORS.ivory, 

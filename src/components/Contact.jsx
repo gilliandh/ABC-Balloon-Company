@@ -41,14 +41,28 @@ export default function Contact() {
           window.gtag("event", "form_submit", {
             event_category: "Contact",
             event_label: "Quote Request",
+            event_type: formData.eventType,
+            event_date: formData.eventDate,
           });
         }
       } else {
         setStatus("error");
+        if (window.gtag) {
+          window.gtag("event", "form_error", {
+            event_category: "Contact",
+            event_label: `HTTP error status ${res.status}`,
+          });
+        }
       }
     } catch (err) {
       console.error("GHL submission error:", err);
       setStatus("error");
+      if (window.gtag) {
+        window.gtag("event", "form_error", {
+          event_category: "Contact",
+          event_label: err.message || "Network Error",
+        });
+      }
     }
   };
 

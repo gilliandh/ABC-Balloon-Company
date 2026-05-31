@@ -5,6 +5,17 @@ import AnimatedSection from "./AnimatedSection";
 export default function Faq() {
   const [openFaq, setOpenFaq] = useState(null);
 
+  const handleFaqClick = (questionText, index) => {
+    const isOpening = openFaq !== index;
+    setOpenFaq(isOpening ? index : null);
+    if (isOpening && window.gtag) {
+      window.gtag("event", "faq_expand", {
+        event_category: "FAQ",
+        event_label: questionText,
+      });
+    }
+  };
+
   return (
     <section id="faq" style={{ background: COLORS.charcoal, padding: "8rem 2rem" }}>
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
@@ -21,7 +32,7 @@ export default function Faq() {
           <AnimatedSection key={f.q} delay={i * 60}>
             <div style={{ borderTop: `1px solid rgba(199,166,106,0.15)` }}>
               <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                onClick={() => handleFaqClick(f.q, i)}
                 style={{
                   width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
                   padding: "1.75rem 0", background: "none", border: "none", cursor: "pointer",

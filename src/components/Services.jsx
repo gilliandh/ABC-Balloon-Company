@@ -23,7 +23,7 @@ export default function Services() {
             Statement Installs.<br /><em style={{ color: COLORS.champagne }}>Crafted to Last.</em>
           </h2>
         </AnimatedSection>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1px", background: "rgba(199,166,106,0.1)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1px", background: "rgba(199,166,106,0.1)" }}>
           {SERVICES.map((s, i) => (
             <AnimatedSection key={s.title} delay={i * 80}>
               <div

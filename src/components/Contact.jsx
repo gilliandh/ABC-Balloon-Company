@@ -3,8 +3,13 @@ import { COLORS } from "../constants";
 import AnimatedSection from "./AnimatedSection";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", event: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", eventType: "", eventDate: "", message: "" });
   const [status, setStatus] = useState("idle");
+
+  const todayStr = (() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  })();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,17 +18,16 @@ export default function Contact() {
     const payload = {
       full_name: formData.name,
       email: formData.email,
-      event_type: formData.event,
+      phone: formData.phone,
+      event_type: formData.eventType,
+      event_date: formData.eventDate,
       message: formData.message,
       source: "Website Contact Form",
       tags: ["website-lead", "atlanta-balloon-co"],
     };
 
     try {
-      const webhookUrl = import.meta.env.VITE_GHL_WEBHOOK_URL;
-      if (!webhookUrl) {
-        throw new Error("Missing VITE_GHL_WEBHOOK_URL");
-      }
+      const webhookUrl = import.meta.env.VITE_GHL_WEBHOOK_URL || "https://services.leadconnectorhq.com/hooks/gsLg6IM3uj9S3b5pl7QW/webhook-trigger/13843881-ca0b-4d14-af4e-3265dd90031a";
 
       const res = await fetch(webhookUrl, {
         method: "POST",
@@ -86,18 +90,31 @@ export default function Contact() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              {[
-                { name: "name", label: "Full Name", type: "text" },
-                { name: "email", label: "Email Address", type: "email" },
-                { name: "event", label: "Event Type & Date", type: "text" },
-              ].map((f) => (
-                <div key={f.name} style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                  <label style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.champagne, fontWeight: 700 }}>{f.label}</label>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                <label style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.champagne, fontWeight: 700 }}>Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                  style={{
+                    background: "rgba(255,255,255,0.04)", border: `1px solid rgba(199,166,106,0.2)`,
+                    color: COLORS.ivory, padding: "14px 16px", fontSize: 15, fontFamily: "'Lato', sans-serif",
+                    outline: "none", width: "100%", boxSizing: "border-box",
+                  }}
+                  onFocus={e => e.target.style.borderColor = "rgba(199,166,106,0.6)"}
+                  onBlur={e => e.target.style.borderColor = "rgba(199,166,106,0.2)"}
+                />
+              </div>
+
+              <div className="form-row">
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.champagne, fontWeight: 700 }}>Email Address</label>
                   <input
-                    type={f.type}
+                    type="email"
                     required
-                    value={formData[f.name]}
-                    onChange={e => setFormData(p => ({ ...p, [f.name]: e.target.value }))}
+                    value={formData.email}
+                    onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
                     style={{
                       background: "rgba(255,255,255,0.04)", border: `1px solid rgba(199,166,106,0.2)`,
                       color: COLORS.ivory, padding: "14px 16px", fontSize: 15, fontFamily: "'Lato', sans-serif",
@@ -107,7 +124,63 @@ export default function Contact() {
                     onBlur={e => e.target.style.borderColor = "rgba(199,166,106,0.2)"}
                   />
                 </div>
-              ))}
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.champagne, fontWeight: 700 }}>Phone Number</label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="(404) 000-0000"
+                    value={formData.phone}
+                    onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
+                    style={{
+                      background: "rgba(255,255,255,0.04)", border: `1px solid rgba(199,166,106,0.2)`,
+                      color: COLORS.ivory, padding: "14px 16px", fontSize: 15, fontFamily: "'Lato', sans-serif",
+                      outline: "none", width: "100%", boxSizing: "border-box",
+                    }}
+                    onFocus={e => e.target.style.borderColor = "rgba(199,166,106,0.6)"}
+                    onBlur={e => e.target.style.borderColor = "rgba(199,166,106,0.2)"}
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.champagne, fontWeight: 700 }}>Event Type</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Wedding, Gala"
+                    value={formData.eventType}
+                    onChange={e => setFormData(p => ({ ...p, eventType: e.target.value }))}
+                    style={{
+                      background: "rgba(255,255,255,0.04)", border: `1px solid rgba(199,166,106,0.2)`,
+                      color: COLORS.ivory, padding: "14px 16px", fontSize: 15, fontFamily: "'Lato', sans-serif",
+                      outline: "none", width: "100%", boxSizing: "border-box",
+                    }}
+                    onFocus={e => e.target.style.borderColor = "rgba(199,166,106,0.6)"}
+                    onBlur={e => e.target.style.borderColor = "rgba(199,166,106,0.2)"}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.champagne, fontWeight: 700 }}>Event Date</label>
+                  <input
+                    type="date"
+                    required
+                    min={todayStr}
+                    className="form-date-input"
+                    value={formData.eventDate}
+                    onChange={e => setFormData(p => ({ ...p, eventDate: e.target.value }))}
+                    style={{
+                      background: "rgba(255,255,255,0.04)", border: `1px solid rgba(199,166,106,0.2)`,
+                      color: COLORS.ivory, padding: "14px 16px", fontSize: 15, fontFamily: "'Lato', sans-serif",
+                      outline: "none", width: "100%", boxSizing: "border-box",
+                    }}
+                    onFocus={e => e.target.style.borderColor = "rgba(199,166,106,0.6)"}
+                    onBlur={e => e.target.style.borderColor = "rgba(199,166,106,0.2)"}
+                  />
+                </div>
+              </div>
+
               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                 <label style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.champagne, fontWeight: 700 }}>Tell Us About Your Event</label>
                 <textarea

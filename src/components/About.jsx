@@ -32,21 +32,37 @@ export default function About() {
           </div>
         </AnimatedSection>
         <AnimatedSection delay={200}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-            {[
-              { bg: COLORS.emerald, h: 220 },
-              { bg: "#1a3a2d", h: 160 },
-              { bg: "#1a3a2d", h: 160 },
-              { bg: COLORS.emerald, h: 220 },
-            ].map((b, i) => (
-              <div key={i} style={{
-                height: b.h, background: b.bg,
-                backgroundImage: "radial-gradient(circle at 40% 40%, rgba(199,166,106,0.12) 0%, transparent 65%)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 48, color: "rgba(199,166,106,0.2)" }}>✦</span>
-              </div>
-            ))}
+          <div style={{ 
+            position: "relative", 
+            overflow: "hidden", 
+            borderRadius: 4, 
+            border: `1px solid rgba(199,166,106,0.25)`,
+            aspectRatio: "4/3",
+            width: "100%",
+          }}>
+            <img 
+              src="/images/atlanta_skyline_balloons.png" 
+              alt="Atlanta Skyline Luxury Balloon Installation" 
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+                transition: "transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
+              }}
+              onMouseEnter={e => e.target.style.transform = "scale(1.03)"}
+              onMouseLeave={e => e.target.style.transform = "scale(1)"}
+            />
+            {/* Elegant glassmorphic overlay badge */}
+            <div style={{
+              position: "absolute", bottom: "1.5rem", left: "1.5rem",
+              background: "rgba(1, 59, 45, 0.8)", backdropFilter: "blur(8px)",
+              border: `1px solid rgba(199,166,106,0.3)`, padding: "10px 18px",
+              color: COLORS.champagne, fontSize: 10, letterSpacing: "0.2em",
+              textTransform: "uppercase", fontWeight: 700, pointerEvents: "none"
+            }}>
+              ✦ Midtown Rooftop
+            </div>
           </div>
         </AnimatedSection>
       </div>

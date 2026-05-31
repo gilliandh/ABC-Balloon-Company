@@ -30,15 +30,15 @@ export default function Gallery() {
             </a>
           </div>
         </AnimatedSection>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridTemplateRows: "auto", gap: "8px" }}>
+        <div className="gallery-grid">
           {GALLERY_ITEMS.map((item, i) => (
             <AnimatedSection key={item.label} delay={i * 60}>
               <div
+                className={i === 1 || i === 4 ? "gallery-span-2" : "gallery-span-1"}
                 style={{
                   background: item.color,
                   aspectRatio: item.aspect === "tall" ? "3/4" : item.aspect === "wide" ? "4/3" : "1/1",
                   position: "relative", overflow: "hidden",
-                  gridColumn: i === 1 || i === 4 ? "span 2" : "span 1",
                   display: "flex", alignItems: "flex-end",
                   cursor: "pointer",
                 }}
